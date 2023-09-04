@@ -1,0 +1,36 @@
+import { setupAxiosInterceptors } from '@x-mart/utils/src';
+import router from '@/router/index';
+import store from 'store2';
+
+const STORAGE_TOKEN_KEY = 'token';
+const { get: GET, post: POST } = setupAxiosInterceptors({
+    url: import.meta.env.VITE_API_URL as string,
+    expireCallback: () => {
+        // 退出登录
+        // removeStorage(STORAGE_TOKEN_KEY);
+        // removeStorage('userInfo');
+        store.local.remove(STORAGE_TOKEN_KEY);
+        store.local.remove('userInfo');
+        router.push(`/login?redirect=${router.currentRoute.value.path}`);
+    },
+    storageTokenKey: 'token',
+    successValidate(responseData) {
+        return responseData.code === 200 ? true : false;
+        // return true;
+    },
+});
+
+async function downloadFileFromURL(url?: string, fileName = ''): Promise<boolean> {
+    if (!url) {
+        return false;
+    }
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+
+    a.click();
+    return true;
+}
+
+export { GET, POST, downloadFileFromURL };
