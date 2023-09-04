@@ -1,10 +1,6 @@
 node_modules
 pnpm-lock.yaml
 
-dist
-
-**/dist
-*.d.ts
 *.local
 *.log
 *.idea
