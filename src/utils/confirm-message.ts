@@ -26,9 +26,9 @@ export async function confirmDeleteMessage(message?: string): Promise<boolean> {
  * 确认重置弹出提示
  * @returns 是否重置
  */
-export async function confirmResetMessage(): Promise<boolean> {
+export async function confirmResetMessage(message?: string): Promise<boolean> {
     const [err] = await to(
-        ElMessageBox.confirm('是否确认重置密码？', '提示', {
+        ElMessageBox.confirm(message ?? OPERATION_NOTICE.RESET_CONFIRM, '提示', {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
@@ -46,9 +46,9 @@ export async function confirmResetMessage(): Promise<boolean> {
  * 确认退出弹出提示
  * @returns 是否退出
  */
-export async function confirmExitMessage(): Promise<boolean> {
+export async function confirmExitMessage(message?: string): Promise<boolean> {
     const [err] = await to(
-        ElMessageBox.confirm('是否确认退出？', '提示', {
+        ElMessageBox.confirm(message ?? OPERATION_NOTICE.LOGOUT_CONFIRM, '提示', {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
