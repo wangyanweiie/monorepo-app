@@ -14,7 +14,7 @@
         "generate-api": "cd ./script/generate-api && npx openapi-generator-cli generate -c ./openapitools.json --generator-key v2.0",
         "rewrite-api": "pnpm write-api & pnpm generate-api"
     },
-    "author": "x-mart",
+    "author": "wyw",
     "license": "ISC",
     "dependencies": {
         "@custom/components": "workspace:*",
