@@ -1,6 +1,8 @@
+import { ref, type Ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { confirmDeleteMessage } from './confirm-message';
 import { OPERATION_NOTICE } from '@custom/utils/src/index';
+import { confirmDeleteMessage } from '@/utils/confirm-message';
+import FileAPI from '@/api/upload';
 
 /**
  * 通用删除
@@ -104,4 +106,98 @@ export async function handleCommonExport(
     }
 
     tableRef?.clearSelection();
+}
+
+/**
+ * 下载文件
+ * @param url 文件路径
+ * @param fileName 文件名
+ * @returns { boolean }
+ */
+export async function downloadFileFromURL(url?: string, fileName = ''): Promise<boolean> {
+    if (!url) {
+        return false;
+    }
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+
+    a.click();
+    return true;
+}
+
+/**
+ * 导入方法
+ */
+export function importTemplate(): {
+    importExcel: (
+        params: any,
+        api: (data: Record<string, unknown>) => Promise<unknown>,
+        extraQueryData?: Record<string, string | number>,
+    ) => Promise<boolean>;
+    errorUrl: Ref<any>;
+} {
+    /**
+     * 上传错误时返回的 url
+     */
+    const errorUrl = ref<any>('');
+
+    /**
+     * 导入方法
+     * @param params 文件
+     * @param api 导入接口
+     * @param extraQueryData 导入接口额外参数
+     * @returns
+     */
+    async function importExcel(
+        params: any,
+        api: (data: Record<string, unknown>) => Promise<unknown>,
+        extraQueryData?: Record<string, string | number>,
+    ): Promise<any> {
+        // 导入文件类型判断
+        const suffix = params.file.name.split('.').pop() || '';
+
+        if (!['xlsx', 'xls'].includes(suffix)) {
+            ElMessage.warning(OPERATION_NOTICE.IMPORT_FILE_TYPE_ERROR);
+            return;
+        }
+
+        // 上传导入的文件
+        const formData = new FormData();
+        formData.append('file', params.file);
+        const uploadRes = await FileAPI.upload(formData);
+
+        if (!uploadRes) {
+            ElMessage.error(OPERATION_NOTICE.UPLOAD_ERROR);
+            return;
+        }
+
+        // 上传成功 => 调导入接口
+        const res = await api({
+            urlPath: uploadRes,
+            ...extraQueryData,
+        });
+
+        if (!res) {
+            errorUrl.value = null;
+            ElMessage.error(OPERATION_NOTICE.IMPORT_ERROR);
+            return;
+        }
+
+        // 导入成功：当后台返回的 data 为 null 时，前端会处理成 true，此时代表导入成功
+        if (res === true) {
+            errorUrl.value = null;
+            ElMessage.success(OPERATION_NOTICE.IMPORT_SUCCESS);
+        } else {
+            // 否则代表导入失败， date 为 url => 返回导入失败的 excel 表格
+            errorUrl.value = res;
+            ElMessage.error(OPERATION_NOTICE.IMPORT_ERROR);
+        }
+    }
+
+    return {
+        importExcel,
+        errorUrl,
+    };
 }

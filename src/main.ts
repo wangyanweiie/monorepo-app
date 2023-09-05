@@ -1,12 +1,12 @@
 import { createApp } from 'vue';
 import mitt from 'mitt';
 import { createPinia } from 'pinia';
+import App from '@/App.vue';
 import router from '@/router/index';
+import permission from '@/directive/permission';
 import { usePermission } from '@/store/permission';
-import App from './App.vue';
-import permission from './directive/permission';
-import { setupRouterGuard } from './routeGuard';
-import { registerComponents } from './plugins/registerComponents';
+import { setupRouterGuard } from '@/routeGuard';
+import { registerComponents } from '@/plugins/registerComponents';
 
 import 'element-plus/dist/index.css';
 

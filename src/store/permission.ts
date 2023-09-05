@@ -125,7 +125,7 @@ export const usePermissionStore = defineStore('permission', () => {
     }
 
     /**
-     * 动态加载路由
+     * FIXME: 动态加载路由？
      */
     function setActiveRouteList() {
         router.addRoute({
@@ -168,7 +168,5 @@ export function usePermission() {
 
     permissionStore.setPermission(permissions);
     permissionStore.setRoutes(menuRoutes);
-
-    // FIXME: 动态加载路由？
     permissionStore.setActiveRouteList();
 }
