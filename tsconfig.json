@@ -1,30 +1,48 @@
 {
+    // extends 属性可以从另一个配置文件里继承配置
     "extends": "@vue/tsconfig/tsconfig.dom.json",
+
+    /**
+     * "include" 和 "exclude" 属性指定一个文件 glob 匹配模式列表
+     * 支持的 glob 通配符有：
+     * * 匹配 0 或多个字符（不包括目录分隔符）
+     * ? 匹配一个任意字符（不包括目录分隔符）
+     * ** 递归匹配任意子目录
+     *
+     * 如果一个 glob 模式里的某部分只包含 * 或 .*，那么仅有支持的文件扩展名类型被包含在内
+     *（比如默认 .ts，.tsx，和 .d.ts， 如果 allowJs 设置为 true 还包含 .js 和 .jsx）
+     */
     "include": [
-        "src/**/*.ts",
-        "src/**/*.d.ts",
+        "src/**/*",
+        // "src/**/*.ts",
+        // "src/**/*.d.ts",
         "src/**/*.vue",
-        "scripts"
+        "vite.config.ts"
     ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "src/api"
-    ],
+
+    "exclude": ["node_modules/**/*", "dist/**/*"],
+
+    // 编译选项
     "compilerOptions": {
+        // 忽略弃用
         "ignoreDeprecations": "5.0",
+        // 解析非相对模块名的基准目录
         "baseUrl": ".",
+        // "paths" 是相对于 "baseUrl" 进行解析
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        // 默认所有可见的 "@types" 包会在编译过程中被包含进来，若指定了 types，只有被列出来的包才会被包含进来
         "types": [
             "node",
             "vite/client",
             // "element-plus/global",
-            "unplugin-icons/types/vue"
-        ],
-        "paths": {
-            "@/*": ["src/*"]
-        },
-        "importsNotUsedAsValues": "remove"
+            "unplugin-icons/types/vue",
+            "unplugin-vue-define-options/macros-global"
+        ]
     },
+
+    // 启用项目引用
     "references": [
         {
             "path": "./tsconfig.vite-config.json"
