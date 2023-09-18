@@ -18,7 +18,7 @@ export default function useWebSocket(
     url: string,
     handleOpen: () => void,
     handleMessage: (data: any) => void,
-    handleClose: () => void
+    handleClose: () => void,
 ) {
     /**
      * websocket 实例

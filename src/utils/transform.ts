@@ -1,5 +1,5 @@
 import Formula from '@hapi/formula';
-import to from './await-to';
+import { to } from '@custom/utils';
 
 export interface EnumType {
     [key: string]: number | string;

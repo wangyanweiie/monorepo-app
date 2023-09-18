@@ -1,27 +1,33 @@
 import {
     XLayout,
-    XDialogForm,
-    XSearchForm,
+    XUser,
     XLogo,
-    XTable,
     ParentView,
     ParentMenuView,
-    XUser,
+    XTable,
+    XTableV2,
+    XEditTable,
+    XEditTableItem,
     XForm,
-} from '@x-mart/pro-components';
+    XDialogForm,
+    XSearchForm,
+} from '@custom/components';
 
 // GlobalComponents for Volar
 declare module 'vue' {
     export interface GlobalComponents {
         XLayout: typeof XLayout;
-        XDialogForm: typeof XDialogForm;
-        XSearchForm: typeof XSearchForm;
+        XUser: typeof XUser;
         XLogo: typeof XLogo;
-        XTable: typeof XTable;
         ParentView: typeof ParentView;
         ParentMenuView: typeof ParentMenuView;
-        XUser: typeof XUser;
+        XTable: typeof XTable;
+        XTableV2: typeof XTableV2;
+        XEditTable: typeof XEditTable;
+        XEditTableItem: typeof XEditTableItem;
         XForm: typeof XForm;
+        XDialogForm: typeof XDialogForm;
+        XSearchForm: typeof XSearchForm;
     }
 
     interface ComponentCustomProperties {

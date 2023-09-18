@@ -26,8 +26,8 @@
 <script setup lang="ts">
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { usePermissionStore } from '@/store/permission';
-import { useConf } from './conf';
+import { useIndex } from './useIndex';
 
 const { showMenus } = usePermissionStore();
-const { userInfo, dropdownItems, schemas, visible, formRef, loading, form, changePassword } = useConf();
+const { userInfo, dropdownItems, schemas, visible, formRef, loading, form, changePassword } = useIndex();
 </script>

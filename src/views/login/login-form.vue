@@ -27,8 +27,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { to } from '@/utils/await-to';
 import type { FormInstance } from 'element-plus';
+import { to } from '@custom/utils';
 import { useUserStore } from '@/store/user-info';
 import { usePermissionStore } from '@/store/permission';
 import dropdownAPI from '@/api/dropdown';
@@ -80,9 +80,9 @@ const loading = ref<boolean>(false);
  */
 async function login(): Promise<void> {
     // 表单校验
-    const [err] = await to(formRef.value?.validate());
+    const valid = await formRef.value?.validate();
 
-    if (err) {
+    if (!valid) {
         return;
     }
 

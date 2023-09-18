@@ -5,10 +5,12 @@ import {
     XSearchForm,
     XLogo,
     XTable,
+    XTableV2,
     ParentView,
     ParentMenuView,
     XUser,
     XForm,
+    XDescription,
 } from '@custom/components';
 
 /**
@@ -26,6 +28,10 @@ const componentsList: { name: string; component: Component }[] = [
     {
         name: 'XTable',
         component: XTable,
+    },
+    {
+        name: 'XTableV2',
+        component: XTableV2,
     },
     {
         name: 'ParentView',
@@ -50,6 +56,10 @@ const componentsList: { name: string; component: Component }[] = [
     {
         name: 'XSearchForm',
         component: XSearchForm,
+    },
+    {
+        name: 'XDescription',
+        component: XDescription,
     },
 ];
 

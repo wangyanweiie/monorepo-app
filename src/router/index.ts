@@ -1,9 +1,12 @@
 import { createWebHistory, createRouter, type RouteRecordRaw, type RouteLocationNormalized } from 'vue-router';
+import store from 'store2';
 import appLayout from '@/layout/index.vue';
 import { LOCAL_USER_INFO_KEY } from '@/constant/global';
-import store from 'store2';
 
-export const menuRoutes: RouteRecordRaw[] = [
+/**
+ * men-routes
+ */
+const menuRoutes: RouteRecordRaw[] = [
     {
         path: '/home',
         name: 'home',
@@ -16,7 +19,7 @@ export const menuRoutes: RouteRecordRaw[] = [
 ];
 
 /**
- * 路由数组
+ * routes
  */
 const routes: RouteRecordRaw[] = [
     {
@@ -46,6 +49,9 @@ const routes: RouteRecordRaw[] = [
     },
 ];
 
+/**
+ * router
+ */
 const router = createRouter({
     history: createWebHistory(),
     routes,
@@ -74,4 +80,4 @@ const routerBeforeEachFunc: BeforeEachFunc = (to, from, next) => {
 router.beforeEach(routerBeforeEachFunc);
 
 export default router;
-export { routes };
+export { menuRoutes, routes };

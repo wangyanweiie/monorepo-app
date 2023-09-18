@@ -2,7 +2,19 @@ import type { App } from 'vue';
 import store from 'store2';
 import { LOCAL_USER_INFO_KEY } from '@/constant/global';
 
-export default {
+/**
+ * 是否拥有权限
+ * @param permission
+ */
+function hasPermission(permission: string) {
+    const permissions: string[] = store.local.get(LOCAL_USER_INFO_KEY)?.pcPerms || [];
+    return permissions.includes(permission);
+}
+
+/**
+ * 注册权限指令
+ */
+const permission = {
     install(app: App) {
         /**
          * @description 注册全局指令
@@ -18,9 +30,15 @@ export default {
              * @param prevNode 之前的渲染中代表指令所绑定元素的 VNode，仅在 beforeUpdate 和 updated 钩子中可用。
              */
             mounted(el, binding) {
-                const permissions: string[] = store.local.get(LOCAL_USER_INFO_KEY)?.pcPerms || [];
-                if (!binding.value.some((permission: string) => permissions.includes(permission))) {
-                    el.style.display = 'none';
+                if (!binding.value || binding.value.length === 0) {
+                    return;
+                }
+
+                const isHave = binding.value.some(hasPermission);
+
+                if (!isHave) {
+                    // el.style.display = 'none';
+                    el.parentNode?.removeChild(el);
                 }
             },
 
@@ -28,13 +46,22 @@ export default {
              * FIXME: 性能不是很好，最好应该是侦听指令值的变化修改样式
              */
             updated(el, binding) {
-                const permissions: string[] = store.local.get(LOCAL_USER_INFO_KEY)?.pcPerms || [];
-                if (!binding.value.some((permission: string) => permissions.includes(permission))) {
-                    el.style.display = 'none';
+                if (!binding.value || binding.value.length === 0) {
+                    return;
+                }
+
+                const isHave = binding.value.some(hasPermission);
+
+                if (!isHave) {
+                    // el.style.display = 'none';
+                    el.parentNode?.removeChild(el);
                 } else {
-                    el.style.display = '';
+                    // el.style.display = '';
                 }
             },
         });
     },
 };
+
+export default permission;
+export { hasPermission };

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { saveUserToken, getUserToken, saveUserInfo, getUserInfo } from '@/utils/storage';
 import store from 'store2';
+import { saveUserToken, getUserToken, saveUserInfo, getUserInfo } from '@/utils/storage';
 
 /**
  * 权限缓存状态

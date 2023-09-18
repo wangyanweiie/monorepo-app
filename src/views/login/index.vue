@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import LoginForm from './login-form.vue';
 
 const title = ref<string>(import.meta.env.VITE_APP_NAME as string);

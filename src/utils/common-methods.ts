@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { OPERATION_NOTICE } from '@custom/utils/src/index';
+import { OPERATION_NOTICE } from '@/constant/base';
 import { confirmDeleteMessage } from '@/utils/confirm-message';
 import FileAPI from '@/api/upload';
 

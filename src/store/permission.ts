@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router';
 import { defineStore } from 'pinia';
-import { generateActiveRoutes, generateCacheList, generateShowMenus } from '@custom/components';
 import store from 'store2';
+import { generateActiveRoutes, generateCacheList, generateShowMenus } from '@custom/components';
 import router, { menuRoutes } from '@/router/index';
 import appLayout from '@/layout/index.vue';
 import { LOCAL_USER_INFO_KEY } from '@/constant/global';
@@ -9,7 +9,7 @@ import { LOCAL_USER_INFO_KEY } from '@/constant/global';
 /**
  * 权限缓存状态
  */
-export const usePermissionStore = defineStore('permission', () => {
+const usePermissionStore = defineStore('permission', () => {
     // ================= 权限 =================
     /**
      * 是否开启权限设置
@@ -56,7 +56,7 @@ export const usePermissionStore = defineStore('permission', () => {
     }
 
     /**
-     * 根据权限数据生成可用路由
+     * 根据路由与权限数据生成可用路由
      */
     const activeRoutes = computed<RouteRecordRaw[]>(() => {
         if (usable.value) {
@@ -87,7 +87,7 @@ export const usePermissionStore = defineStore('permission', () => {
     }
 
     /**
-     * 根据权限生成缓存路由
+     * 根据路由与权限数组生成缓存数组
      */
     const cacheList = computed<string[]>(() => {
         if (!useCache.value) {
@@ -103,7 +103,7 @@ export const usePermissionStore = defineStore('permission', () => {
 
     // ================= menu =================
     /**
-     * 根据权限生成菜单路由
+     * 根据路由与权限数组生成菜单路由
      */
     const showMenus = computed<RouteRecordRaw[]>(() => {
         if (usable.value) {
@@ -113,8 +113,9 @@ export const usePermissionStore = defineStore('permission', () => {
         return generateShowMenus(routes.value);
     });
 
+    // ================= 页面 menu =================
     /**
-     * 获取带有权限的 menus（页面 menu）==> 搭配 parentMenuView 使用
+     * 筛选带有权限的 menus ==> 搭配 parentMenuView 使用
      */
     function getPermissionMenus(routes: RouteRecordRaw[]) {
         if (usable.value) {
@@ -162,7 +163,7 @@ export const usePermissionStore = defineStore('permission', () => {
 /**
  * 设置路由与权限
  */
-export function usePermission() {
+function usePermission() {
     const permissionStore = usePermissionStore();
     const permissions = store.local.get(LOCAL_USER_INFO_KEY)?.pcPerms;
 
@@ -170,3 +171,5 @@ export function usePermission() {
     permissionStore.setRoutes(menuRoutes);
     permissionStore.setActiveRouteList();
 }
+
+export { usePermissionStore, usePermission };

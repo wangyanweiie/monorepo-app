@@ -37,8 +37,7 @@
             "node",
             "vite/client",
             // "element-plus/global",
-            "unplugin-icons/types/vue",
-            "unplugin-vue-define-options/macros-global"
+            "unplugin-icons/types/vue"
         ]
     },
 

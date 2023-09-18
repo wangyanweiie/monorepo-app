@@ -19,7 +19,7 @@ export class Updater {
      * 读取 index html
      */
     async getHtml() {
-        const html = await fetch('/').then((res) => res.text());
+        const html = await fetch('/').then(res => res.text());
         return html;
     }
 
@@ -46,12 +46,12 @@ export class Updater {
 
         // 如果 length 一样无更新
         if (arr.length === lastLength) {
-            this.dispatch['no-update'].forEach((fn) => {
+            this.dispatch['no-update'].forEach(fn => {
                 fn();
             });
         } else {
             // 否则通知更新
-            this.dispatch['update'].forEach((fn) => {
+            this.dispatch['update'].forEach(fn => {
                 fn();
             });
         }
