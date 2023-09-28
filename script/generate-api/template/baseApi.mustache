@@ -1,9 +1,9 @@
-import { setupAxiosInterceptors } from '@x-mart/utils/src';
+import { useAxiosInterceptors } from '@custom/utils';
 import router from '@/router/index';
 import store from 'store2';
 
 const STORAGE_TOKEN_KEY = 'token';
-const { get: GET, post: POST } = setupAxiosInterceptors({
+const { get: GET, post: POST } = useAxiosInterceptors({
     url: import.meta.env.VITE_API_URL as string,
     expireCallback: () => {
         // 退出登录

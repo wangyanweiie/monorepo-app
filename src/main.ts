@@ -4,7 +4,7 @@ import { createPinia } from 'pinia';
 import App from '@/App.vue';
 import router from '@/router/index';
 import permission from '@/directive/permission';
-import { usePermission } from '@/store/permission';
+import { setPermissionRoute } from '@/store/permission';
 import { setupRouterGuard } from '@/routeGuard';
 import { registerComponents } from '@/plugins/registerComponents';
 
@@ -22,14 +22,14 @@ import 'element-plus/dist/index.css';
     // 注册路由
     app.use(router);
 
+    // 注册 ui
+    // app.use(ElementPlus);
+
     // 注册权限指令
     app.use(permission);
 
-    // 设置路由权限
-    usePermission();
-
-    // 注册 ui
-    // app.use(ElementPlus);
+    // 赋值路由数组并动态加载路由
+    setPermissionRoute();
 
     // 路由守卫
     setupRouterGuard(router);

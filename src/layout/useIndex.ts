@@ -1,16 +1,27 @@
 import type { XFormItemSchema, XFormInstance } from '@custom/components';
+import { clearStorage } from '@custom/utils';
 import { ElMessage } from 'element-plus';
 import { OPERATION_NOTICE } from '@/constant/base';
 import { confirmExitMessage } from '@/utils/confirm-message';
-import { getUserInfo, getUserToken } from '@/utils/storage';
-import { useUserStore } from '@/store/user-info';
+import { getBaseUrl, getUserInfo, getUserToken, saveBaseUrl } from '@/utils/storage';
 import router from '@/router';
 import RequestAPI from '@/api/login';
 
-export function useIndex() {
+export default function useIndex() {
+    const baseUrl = ref<string>(getBaseUrl());
     const token = getUserToken();
     const userInfo = getUserInfo();
-    const { clearCache } = useUserStore();
+
+    /**
+     * 改变 base-url
+     */
+    function handleBlur(e: any): void {
+        if (!e.target.value) {
+            return;
+        }
+
+        saveBaseUrl(e.target.value);
+    }
 
     /**
      * 下拉列表
@@ -19,28 +30,6 @@ export function useIndex() {
         { title: '修改密码', onClick: openDialog },
         { title: '注销', onClick: logout },
     ];
-
-    /**
-     * 退出登录
-     */
-    async function logout() {
-        const confirm = await confirmExitMessage();
-
-        if (!confirm) {
-            return;
-        }
-
-        if (!token) {
-            return;
-        }
-
-        const res = await RequestAPI.logout();
-
-        if (res) {
-            clearCache();
-            router.push(`/login`);
-        }
-    }
 
     /**
      * 表单配置
@@ -126,12 +115,35 @@ export function useIndex() {
         const result = await RequestAPI.logout();
 
         if (result) {
-            clearCache();
+            clearStorage();
+            router.push(`/login`);
+        }
+    }
+
+    /**
+     * 退出登录
+     */
+    async function logout() {
+        const confirm = await confirmExitMessage();
+
+        if (!confirm) {
+            return;
+        }
+
+        if (!token) {
+            return;
+        }
+
+        const res = await RequestAPI.logout();
+
+        if (res) {
+            clearStorage();
             router.push(`/login`);
         }
     }
 
     return {
+        baseUrl,
         userInfo,
         dropdownItems,
         schemas,
@@ -140,5 +152,6 @@ export function useIndex() {
         loading,
         form,
         changePassword,
+        handleBlur,
     };
 }

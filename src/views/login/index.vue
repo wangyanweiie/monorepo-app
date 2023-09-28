@@ -2,13 +2,13 @@
     <div class="wrap">
         <div class="login">
             <div class="login__left">
-                <img src="/svg/login-box-bg.svg" :alt="title" class="login__left__image" />
+                <img src="/svg/login-box-bg.svg" :alt="APP_NAME" class="login__left__image" />
             </div>
 
             <div class="login__right">
                 <div class="login__right__title">
                     <img src="/logo.png" alt="logo" />
-                    <h2>{{ title }}</h2>
+                    <h2>{{ APP_NAME }}</h2>
                 </div>
 
                 <!-- 登录表单 -->
@@ -21,9 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import { APP_NAME } from '@/constant/global';
 import LoginForm from './login-form.vue';
-
-const title = ref<string>(import.meta.env.VITE_APP_NAME as string);
 </script>
 
 <style lang="scss" scoped>

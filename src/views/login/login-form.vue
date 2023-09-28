@@ -25,18 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import type { FormInstance } from 'element-plus';
-import { to } from '@custom/utils';
-import { useUserStore } from '@/store/user-info';
+import { useRouter } from 'vue-router';
 import { usePermissionStore } from '@/store/permission';
 import dropdownAPI from '@/api/dropdown';
 import RequestAPI from '@/api/login';
+import { saveBaseUrl, saveUserToken, saveUserInfo } from '@/utils/storage';
 
 const router = useRouter();
 const { setPermission, setActiveRouteList } = usePermissionStore();
-const { setToken, setUserInfo } = useUserStore();
 
 /**
  * 登录提交表单
@@ -96,12 +93,16 @@ async function login(): Promise<void> {
 
     loading.value = false;
 
-    setToken(res.token);
-    setUserInfo(res);
+    // 保存 baseurl、token 以及用户信息
+    saveBaseUrl(import.meta.env.VITE_API_URL);
+    saveUserToken(res.token);
+    saveUserInfo(res);
+
+    // 保存权限列表并动态加载路由
     setPermission(res?.pcPerms);
     setActiveRouteList();
 
-    // 重定向
+    // 路由重定向
     const redirectPath = router.currentRoute.value.query.redirect;
     if (redirectPath) {
         router.push({ path: redirectPath as string });

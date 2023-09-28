@@ -12,13 +12,7 @@
      * 如果一个 glob 模式里的某部分只包含 * 或 .*，那么仅有支持的文件扩展名类型被包含在内
      *（比如默认 .ts，.tsx，和 .d.ts， 如果 allowJs 设置为 true 还包含 .js 和 .jsx）
      */
-    "include": [
-        "src/**/*",
-        // "src/**/*.ts",
-        // "src/**/*.d.ts",
-        "src/**/*.vue",
-        "vite.config.ts"
-    ],
+    "include": ["src/**/*", "src/**/*.vue", "vite.config.ts"],
 
     "exclude": ["node_modules/**/*", "dist/**/*"],
 

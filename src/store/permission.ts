@@ -1,20 +1,19 @@
-import type { RouteRecordRaw } from 'vue-router';
 import { defineStore } from 'pinia';
-import store from 'store2';
+import type { RouteRecordRaw } from 'vue-router';
 import { generateActiveRoutes, generateCacheList, generateShowMenus } from '@custom/components';
 import router, { menuRoutes } from '@/router/index';
+import { savePermission } from '@/utils/storage';
 import appLayout from '@/layout/index.vue';
-import { LOCAL_USER_INFO_KEY } from '@/constant/global';
 
 /**
  * 权限缓存状态
  */
-const usePermissionStore = defineStore('permission', () => {
+export const usePermissionStore: any = defineStore('permission', () => {
     // ================= 权限 =================
     /**
      * 是否开启权限设置
      */
-    const usable = ref<boolean>(false);
+    const usable = ref<boolean>(true);
 
     /**
      * 开启权限
@@ -33,13 +32,14 @@ const usePermissionStore = defineStore('permission', () => {
     /**
      * 权限数组
      */
-    const permissions = ref<string[]>([]);
+    const permissions = ref<string[]>(['首页']);
 
     /**
      * 更新权限数组
      */
     function setPermission(value: string[]): void {
         permissions.value = ['首页', ...(value ?? [])];
+        savePermission(permissions.value);
     }
 
     // ================= 路由 =================
@@ -126,7 +126,7 @@ const usePermissionStore = defineStore('permission', () => {
     }
 
     /**
-     * FIXME: 动态加载路由？
+     * 动态加载路由
      */
     function setActiveRouteList() {
         router.addRoute({
@@ -161,15 +161,12 @@ const usePermissionStore = defineStore('permission', () => {
 });
 
 /**
- * 设置路由与权限
+ * 设置路由
  */
-function usePermission() {
+export function setPermissionRoute() {
     const permissionStore = usePermissionStore();
-    const permissions = store.local.get(LOCAL_USER_INFO_KEY)?.pcPerms;
 
-    permissionStore.setPermission(permissions);
+    // 赋值路由数组并动态加载路由
     permissionStore.setRoutes(menuRoutes);
     permissionStore.setActiveRouteList();
 }
-
-export { usePermissionStore, usePermission };
