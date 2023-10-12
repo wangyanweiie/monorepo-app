@@ -18,6 +18,14 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item prop="baseUrl">
+                <el-input
+                    v-if="ENV !== 'production'"
+                    v-model="form.baseUrl"
+                    placeholder="BASE_URl"
+                    @blur="handleBlur"
+                ></el-input>
+            </el-form-item>
         </el-form>
 
         <el-button class="form__login-button" type="primary" :loading="loading" @click="login"> 登录 </el-button>
@@ -30,7 +38,7 @@ import { useRouter } from 'vue-router';
 import { usePermissionStore } from '@/store/permission';
 import dropdownAPI from '@/api/dropdown';
 import RequestAPI from '@/api/login';
-import { saveBaseUrl, saveUserToken, saveUserInfo } from '@/utils/storage';
+import { getBaseUrl, saveBaseUrl, saveUserToken, saveUserInfo } from '@/utils/storage';
 
 const router = useRouter();
 const { setPermission, setActiveRouteList } = usePermissionStore();
@@ -42,6 +50,7 @@ interface Form {
     account: string;
     password: string;
     companyId: string;
+    baseUrl: string;
 }
 
 /**
@@ -56,6 +65,8 @@ const form = reactive<Form>({
     account: '',
     password: '',
     companyId: '',
+    // m ?? n：只有当左侧 m 值为 null/undefined 时才返回 n的值，为 0/空字符串/false 都返回 m 的值
+    baseUrl: getBaseUrl() || import.meta.env.VITE_API_URL,
 });
 
 /**
@@ -65,7 +76,37 @@ const rules = {
     account: [{ required: true, message: '账号不能为空' }],
     password: [{ required: true, message: '密码不能为空' }],
     companyId: [{ required: true, message: '公司不能为空' }],
+    baseUrl: [{ required: true, message: 'BASE_URL 不能为空' }],
 };
+
+/**
+ * 公司列表
+ */
+const companyList = ref<any>([]);
+
+/**
+ * 获取公司列表
+ */
+async function getCompanyList() {
+    const res = await dropdownAPI.getCompanyName();
+
+    if (!res) {
+        return false;
+    }
+
+    companyList.value = res;
+}
+
+/**
+ * 改变 base-url
+ */
+function handleBlur(e: any) {
+    if (!e.target.value) {
+        return;
+    }
+
+    saveBaseUrl(e.target.value);
+}
 
 /**
  * loading
@@ -93,13 +134,11 @@ async function login(): Promise<void> {
 
     loading.value = false;
 
-    // 保存 baseurl、token 以及用户信息
-    saveBaseUrl(import.meta.env.VITE_API_URL);
     saveUserToken(res.token);
     saveUserInfo(res);
-
-    // 保存权限列表并动态加载路由
     setPermission(res?.pcPerms);
+
+    // 动态加载路由
     setActiveRouteList();
 
     // 路由重定向
@@ -112,21 +151,14 @@ async function login(): Promise<void> {
 }
 
 /**
- * 公司列表
- */
-const companyList = ref<any>([]);
-
-/**
  * 页面渲染
  */
 onMounted(async () => {
-    const res = await dropdownAPI.getCompanyName();
-
-    if (!res) {
-        return false;
+    if (!getBaseUrl()) {
+        saveBaseUrl(import.meta.env.VITE_API_URL);
     }
 
-    companyList.value = res;
+    getCompanyList();
 });
 </script>
 
