@@ -39,6 +39,7 @@ import { usePermissionStore } from '@/store/permission';
 import dropdownAPI from '@/api/dropdown';
 import RequestAPI from '@/api/login';
 import { getBaseUrl, saveBaseUrl, saveUserToken, saveUserInfo } from '@/utils/storage';
+import { ENV } from '@/constant/global';
 
 const router = useRouter();
 const { setPermission, setActiveRouteList } = usePermissionStore();
@@ -154,10 +155,7 @@ async function login(): Promise<void> {
  * 页面渲染
  */
 onMounted(async () => {
-    if (!getBaseUrl()) {
-        saveBaseUrl(import.meta.env.VITE_API_URL);
-    }
-
+    saveBaseUrl(import.meta.env.VITE_API_URL);
     getCompanyList();
 });
 </script>

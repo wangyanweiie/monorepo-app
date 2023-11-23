@@ -7,12 +7,12 @@
 
             <template #header-right>
                 <div class="header-right">
-                    <!-- <el-input
+                    <el-input
                         v-if="ENV !== 'production'"
                         v-model="baseUrl"
                         class="header-right__item"
                         @blur="handleBlur"
-                    ></el-input> -->
+                    ></el-input>
 
                     <x-user
                         :user-name="userInfo?.userName"

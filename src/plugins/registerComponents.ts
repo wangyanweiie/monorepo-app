@@ -67,7 +67,7 @@ const componentsList: { name: string; component: Component }[] = [
  * 收集组件后统一注册组件
  * @param app 实例
  */
-export function registerComponents(app: App) {
+export default function registerComponents(app: App) {
     componentsList.forEach((item: { name: string; component: Component }) => {
         app.component(item.name, item.component);
     });
